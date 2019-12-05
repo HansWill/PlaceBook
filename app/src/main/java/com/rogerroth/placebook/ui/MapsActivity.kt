@@ -1,7 +1,6 @@
 package com.rogerroth.placebook.ui
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -10,7 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -159,7 +157,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 	private fun setupViewModel() {
 		mapsViewModel = ViewModelProviders.of(this).get(MapsViewModel::class.java)
-		createBookmarkMarkerObserver()
+		createBookmarkObserver()
 	}
 
 	private fun setupLocationClient() {
@@ -184,9 +182,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 				}
 				marker.remove();
 			}
-			is MapsViewModel.BookmarkMarkerView -> {
+			is MapsViewModel.BookmarkView -> {
 				val bookmarkMarkerView = (marker.tag as
-						MapsViewModel.BookmarkMarkerView)
+						MapsViewModel.BookmarkView)
 				marker.hideInfoWindow()
 				bookmarkMarkerView.id?.let {
 					startBookmarkDetails(it)
@@ -195,10 +193,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		}
 	}
 
-	private fun createBookmarkMarkerObserver() {
-		mapsViewModel.getBookmarkMarkerViews()?.observe(
+	private fun createBookmarkObserver() {
+		mapsViewModel.getBookmarkViews()?.observe(
 			this, androidx.lifecycle
-				.Observer<List<MapsViewModel.BookmarkMarkerView>> {
+				.Observer<List<MapsViewModel.BookmarkView>> {
 
 					map.clear()
 
@@ -208,13 +206,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 				})
 	}
 
-	private fun displayAllBookmarks(bookmarks: List<MapsViewModel.BookmarkMarkerView>) {
+	private fun displayAllBookmarks(bookmarks: List<MapsViewModel.BookmarkView>) {
 		for (bookmark in bookmarks) {
 			addPlaceMarker(bookmark)
 		}
 	}
 
-	private fun addPlaceMarker(bookmark: MapsViewModel.BookmarkMarkerView): Marker? {
+	private fun addPlaceMarker(bookmark: MapsViewModel.BookmarkView): Marker? {
 		val marker = map.addMarker(MarkerOptions()
 			.position(bookmark.location)
 			.title(bookmark.name)
