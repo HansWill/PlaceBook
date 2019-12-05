@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -47,6 +48,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 	private lateinit var fusedLocationClient: FusedLocationProviderClient
 	private lateinit var mapsViewModel: MapsViewModel
 	private lateinit var bookmarkListAdapter: BookmarkListAdapter
+	private var markers = HashMap<Long, Marker>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -204,6 +206,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 				.Observer<List<MapsViewModel.BookmarkView>> {
 
 					map.clear()
+					markers.clear()
 
 					it?.let {
 						displayAllBookmarks(it)
@@ -227,6 +230,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 				BitmapDescriptorFactory.HUE_AZURE))
 			.alpha(0.8f))
 		marker.tag = bookmark
+		bookmark.id?.let { markers.put(it, marker) }
 		return marker
 	}
 
@@ -265,6 +269,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		bookmarkRecyclerView.layoutManager = layoutManager
 		bookmarkListAdapter = BookmarkListAdapter(null, this)
 		bookmarkRecyclerView.adapter = bookmarkListAdapter
+	}
+
+	private fun updateMapToLocation(location: Location) {
+		val latLng = LatLng(location.latitude, location.longitude)
+		map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f))
+	}
+
+	fun moveToBookmark(bookmark: MapsViewModel.BookmarkView) {
+		drawerLayout.closeDrawer(drawerView)
+		val marker = markers[bookmark.id]
+		marker?.showInfoWindow()
+		val location = Location("")
+		location.latitude = bookmark.location.latitude
+		location.longitude = bookmark.location.longitude
+		updateMapToLocation(location)
 	}
 
 	companion object {
