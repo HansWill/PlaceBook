@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -31,8 +32,10 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.rogerroth.placebook.R
 import com.rogerroth.placebook.adapter.BookmarkInfoWindowAdapter
+import com.rogerroth.placebook.adapter.BookmarkListAdapter
 import com.rogerroth.placebook.viewmodel.MapsViewModel
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.drawer_view_maps.*
 import kotlinx.android.synthetic.main.main_view_maps.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,6 +46,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 	private lateinit var placesClient: PlacesClient
 	private lateinit var fusedLocationClient: FusedLocationProviderClient
 	private lateinit var mapsViewModel: MapsViewModel
+	private lateinit var bookmarkListAdapter: BookmarkListAdapter
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -62,6 +66,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		setupMapListeners()
 		setupViewModel()
 		getCurrentLocation()
+		setupNavigationDrawer()
 	}
 
 	private fun setupPlacesClient() {
@@ -202,6 +207,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 					it?.let {
 						displayAllBookmarks(it)
+						bookmarkListAdapter.setBookmarkData(it)
 					}
 				})
 	}
@@ -245,8 +251,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 	private fun requestLocationPermissions() {
 		ActivityCompat.requestPermissions(this,
-			arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-			REQUEST_LOCATION)
+			arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION)
 	}
 
 	private fun setupToolbar() {
@@ -255,9 +260,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		toggle.syncState()
 	}
 
+	private fun setupNavigationDrawer() {
+		val layoutManager = LinearLayoutManager(this)
+		bookmarkRecyclerView.layoutManager = layoutManager
+		bookmarkListAdapter = BookmarkListAdapter(null, this)
+		bookmarkRecyclerView.adapter = bookmarkListAdapter
+	}
+
 	companion object {
-		const val EXTRA_BOOKMARK_ID =
-			"com.rogerroth.placebook.EXTRA_BOOKMARK_ID"
+		const val EXTRA_BOOKMARK_ID = "com.rogerroth.placebook.EXTRA_BOOKMARK_ID"
 		private const val REQUEST_LOCATION = 1
 		private const val TAG = "MapsActivity"
 	}
