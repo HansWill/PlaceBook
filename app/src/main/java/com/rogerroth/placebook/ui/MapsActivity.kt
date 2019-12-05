@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -33,6 +34,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.rogerroth.placebook.R
 import com.rogerroth.placebook.adapter.BookmarkInfoWindowAdapter
 import com.rogerroth.placebook.viewmodel.MapsViewModel
+import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.main_view_maps.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,6 +54,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		mapFragment.getMapAsync(this)
 
 		setupLocationClient()
+		setupToolbar()
 		setupPlacesClient()
 	}
 
@@ -250,6 +253,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 	private fun setupToolbar() {
 		setSupportActionBar(toolbar)
+		val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer)
+		toggle.syncState()
 	}
 
 	companion object {
