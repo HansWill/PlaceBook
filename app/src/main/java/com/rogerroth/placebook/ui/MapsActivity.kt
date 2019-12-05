@@ -33,6 +33,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.rogerroth.placebook.R
 import com.rogerroth.placebook.adapter.BookmarkInfoWindowAdapter
 import com.rogerroth.placebook.viewmodel.MapsViewModel
+import kotlinx.android.synthetic.main.main_view_maps.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -245,6 +246,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		ActivityCompat.requestPermissions(this,
 			arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
 			REQUEST_LOCATION)
+	}
+
+	private fun setupToolbar() {
+		setSupportActionBar(toolbar)
 	}
 
 	companion object {
