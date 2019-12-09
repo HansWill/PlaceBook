@@ -14,6 +14,8 @@ class BookmarkRepo(private val context: Context) {
 	private var bookmarkDao: BookmarkDao = db.bookmarkDao()
 	private var categoryMap: HashMap<Place.Type, String> = buildCategoryMap()
 	private var  allCategories: HashMap<String, Int> = buildCategories()
+	val categories: List<String>
+	get() = ArrayList(allCategories.keys)
 
 	fun updateBookmark(bookmark: Bookmark) {
 		bookmarkDao.updateBookmark(bookmark)
