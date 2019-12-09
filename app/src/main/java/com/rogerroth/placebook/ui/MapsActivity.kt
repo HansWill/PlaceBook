@@ -94,6 +94,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		}
 	}
 
+	private fun newBookmark(latLng: LatLng) {
+		GlobalScope.launch {
+			val bookmarkId = mapsViewModel.addBookmark(latLng)
+			bookmarkId?.let {
+				startBookmarkDetails(it)
+			}
+		}
+	}
+
 	private fun setupPlacesClient() {
 		Places.initialize(getApplicationContext(), "AIzaSyD2x173I8MvUwlCA5-PSrraHbLovgvZSpQ");
 		placesClient = Places.createClient(this);
@@ -109,6 +118,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		}
 		fab.setOnClickListener {
 			searchAtCurrentLocation()
+		}
+		map.setOnMapLongClickListener { latLng ->
+			newBookmark(latLng)
 		}
 	}
 
