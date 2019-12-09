@@ -60,6 +60,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		setupLocationClient()
 		setupToolbar()
 		setupPlacesClient()
+		setupNavigationDrawer()
 	}
 
 	override fun onMapReady(googleMap: GoogleMap) {
@@ -68,7 +69,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		setupMapListeners()
 		setupViewModel()
 		getCurrentLocation()
-		setupNavigationDrawer()
 	}
 
 	private fun setupPlacesClient() {
@@ -150,9 +150,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 		marker?.showInfoWindow()
 	}
 
-	override fun onRequestPermissionsResult(requestCode: Int,
-											permissions: Array<String>,
-											grantResults: IntArray) {
+	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
 		if (requestCode == REQUEST_LOCATION) {
 			if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				getCurrentLocation()

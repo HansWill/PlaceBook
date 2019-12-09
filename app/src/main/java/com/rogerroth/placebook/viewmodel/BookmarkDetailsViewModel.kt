@@ -70,12 +70,21 @@ class BookmarkDetailsViewModel(application: Application) : AndroidViewModel(appl
 		var address: String = "",
 		var notes: String = ""
 	) {
+
 		fun getImage(context: Context): Bitmap? {
 			id?.let {
-				return ImageUtils.loadBitmapFromFile(context,
-					Bookmark.generateImageFilename(it))
+				return ImageUtils.loadBitmapFromFile(
+					context,
+					Bookmark.generateImageFilename(it)
+				)
 			}
 			return null
+		}
+
+		fun setImage(context: Context, image: Bitmap) {
+			id?.let {
+				ImageUtils.saveBitmapToFile(context, image, Bookmark.generateImageFilename(it))
+			}
 		}
 	}
 
