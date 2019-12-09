@@ -12,7 +12,7 @@ class BookmarkRepo(private val context: Context) {
 
 	private var db: PlaceBookDatabase = PlaceBookDatabase.getInstance(context)
 	private var bookmarkDao: BookmarkDao = db.bookmarkDao()
-	private var categoryMap: HashMap<Int, String> = buildCategoryMap()
+	private var categoryMap: HashMap<Place.Type, String> = buildCategoryMap()
 	private var  allCategories: HashMap<String, Int> = buildCategories()
 
 	fun updateBookmark(bookmark: Bookmark) {
@@ -38,7 +38,7 @@ class BookmarkRepo(private val context: Context) {
 		return bookmark
 	}
 
-	fun placeTypeToCategory(placeType: Int): String {
+	fun placeTypeToCategory(placeType: Place.Type): String {
 		var category = "Other"
 		if (categoryMap.containsKey(placeType)) {
 			category = categoryMap[placeType].toString()
@@ -65,28 +65,28 @@ class BookmarkRepo(private val context: Context) {
 		)
 	}
 
-	private fun buildCategoryMap() : HashMap<Int, String> {
+	private fun buildCategoryMap() : HashMap<Place.Type, String> {
 		return hashMapOf(
-			Place.TYPE_BAKERY to "Restaurant",
-			Place.TYPE_BAR to "Restaurant",
-			Place.TYPE_CAFE to "Restaurant",
-			Place.TYPE_FOOD to "Restaurant",
-			Place.TYPE_RESTAURANT to "Restaurant",
-			Place.TYPE_MEAL_DELIVERY to "Restaurant",
-			Place.TYPE_MEAL_TAKEAWAY to "Restaurant",
-			Place.TYPE_GAS_STATION to "Gas",
-			Place.TYPE_CLOTHING_STORE to "Shopping",
-			Place.TYPE_DEPARTMENT_STORE to "Shopping",
-			Place.TYPE_FURNITURE_STORE to "Shopping",
-			Place.TYPE_GROCERY_OR_SUPERMARKET to "Shopping",
-			Place.TYPE_HARDWARE_STORE to "Shopping",
-			Place.TYPE_JEWELRY_STORE to "Shopping",
-			Place.TYPE_SHOE_STORE to "Shopping",
-			Place.TYPE_SHOPPING_MALL to "Shopping",
-			Place.TYPE_HOME_GOODS_STORE to "Shopping",
-			Place.TYPE_STORE to "Shopping",
-			Place.TYPE_LODGING to "Lodging",
-			Place.TYPE_ROOM to "Lodging"
+			Place.Type.BAKERY to "Restaurant",
+			Place.Type.BAR to "Restaurant",
+			Place.Type.CAFE to "Restaurant",
+			Place.Type.FOOD to "Restaurant",
+			Place.Type.RESTAURANT to "Restaurant",
+			Place.Type.MEAL_DELIVERY to "Restaurant",
+			Place.Type.MEAL_TAKEAWAY to "Restaurant",
+			Place.Type.GAS_STATION to "Gas",
+			Place.Type.CLOTHING_STORE to "Shopping",
+			Place.Type.DEPARTMENT_STORE to "Shopping",
+			Place.Type.FURNITURE_STORE to "Shopping",
+			Place.Type.GROCERY_OR_SUPERMARKET to "Shopping",
+			Place.Type.HARDWARE_STORE to "Shopping",
+			Place.Type.JEWELRY_STORE to "Shopping",
+			Place.Type.SHOE_STORE to "Shopping",
+			Place.Type.SHOPPING_MALL to "Shopping",
+			Place.Type.HOME_GOODS_STORE to "Shopping",
+			Place.Type.STORE to "Shopping",
+			Place.Type.LODGING to "Lodging",
+			Place.Type.ROOM to "Lodging"
 		)
 	}
 }
