@@ -7,6 +7,9 @@ import com.rogerroth.placebook.R
 import com.rogerroth.placebook.db.BookmarkDao
 import com.rogerroth.placebook.db.PlaceBookDatabase
 import com.rogerroth.placebook.model.Bookmark
+import com.rogerroth.placebook.viewmodel.BookmarkDetailsViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class BookmarkRepo(private val context: Context) {
 
@@ -33,6 +36,11 @@ class BookmarkRepo(private val context: Context) {
 
 	fun createBookmark(): Bookmark {
 		return Bookmark()
+	}
+
+	fun deleteBookmark(bookmark: Bookmark) {
+		bookmark.deleteImage(context)
+		bookmarkDao.deleteBookmark(bookmark)
 	}
 
 	fun getLiveBookmark(bookmarkId: Long): LiveData<Bookmark> {

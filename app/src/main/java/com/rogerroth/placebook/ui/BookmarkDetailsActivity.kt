@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
@@ -66,6 +67,10 @@ class BookmarkDetailsActivity : AppCompatActivity(), PhotoOptionDialogFragment.P
 		when (item.itemId) {
 			R.id.action_save -> {
 				saveChanges()
+				return true
+			}
+			R.id.action_delete -> {
+				deleteBookmark()
 				return true
 			}
 			else -> return super.onOptionsItemSelected(item)
@@ -211,6 +216,19 @@ class BookmarkDetailsActivity : AppCompatActivity(), PhotoOptionDialogFragment.P
 				}
 			}
 		}
+	}
+
+	private fun deleteBookmark() {
+		val bookmarkView = bookmarkDetailsView ?: return
+
+		AlertDialog.Builder(this)
+			.setMessage("Delete?")
+			.setPositiveButton("Ok") { _, _ ->
+				bookmarkDetailsViewModel.deleteBookmark(bookmarkView)
+				finish()
+			}
+			.setNegativeButton("Cancel", null)
+			.create().show()
 	}
 
 	companion object {
