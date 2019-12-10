@@ -19,6 +19,7 @@ import com.rogerroth.placebook.util.ImageUtils
 import com.rogerroth.placebook.viewmodel.BookmarkDetailsViewModel
 import kotlinx.android.synthetic.main.activity_bookmark_details.*
 import java.io.File
+import java.net.URLEncoder
 
 class BookmarkDetailsActivity : AppCompatActivity(), PhotoOptionDialogFragment.PhotoOptionDialogListener {
 
@@ -55,6 +56,7 @@ class BookmarkDetailsActivity : AppCompatActivity(), PhotoOptionDialogFragment.P
 		setupToolbar()
 		setupViewModel()
 		getIntentData()
+		setupFab()
 	}
 
 	override fun onCreateOptionsMenu(menu: android.view.Menu): Boolean {
@@ -229,6 +231,31 @@ class BookmarkDetailsActivity : AppCompatActivity(), PhotoOptionDialogFragment.P
 			}
 			.setNegativeButton("Cancel", null)
 			.create().show()
+	}
+
+	private fun sharePlace() {
+		val bookmarkView = bookmarkDetailsView ?: return
+		var mapUrl = ""
+		if (bookmarkView.placeId == null) {
+			val location = URLEncoder.encode("${bookmarkView.latitude},"
+			+ "${bookmarkView.longitude}", "utf-8")
+			mapUrl = "https://www.google.com/maps/dir/?api=1" + "&destination=$location"
+		} else {
+			val name = URLEncoder.encode(bookmarkView.name, "utf-8")
+			mapUrl = "https://www.google.com/maps/dir/?api=1" +
+					"&destination=$name&destination_place_id=" +
+					"${bookmarkView.placeId}"
+		}
+		val sendIntent = Intent()
+		sendIntent.action = Intent.ACTION_SEND
+		sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out ${bookmarkView.name} at:\n$mapUrl")
+		sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Sharing ${bookmarkView.name}")
+		sendIntent.type = "text/plain"
+		startActivity(sendIntent)
+	}
+
+	private fun setupFab() {
+		fab.setOnClickListener { sharePlace() }
 	}
 
 	companion object {

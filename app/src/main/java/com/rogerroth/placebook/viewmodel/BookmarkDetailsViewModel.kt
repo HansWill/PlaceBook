@@ -82,7 +82,10 @@ class BookmarkDetailsViewModel(application: Application) : AndroidViewModel(appl
 			bookmark.phone,
 			bookmark.address,
 			bookmark.notes,
-			bookmark.category
+			bookmark.category,
+			bookmark.longitude,
+			bookmark.latitude,
+			bookmark.placeId
 		)
 	}
 
@@ -92,7 +95,10 @@ class BookmarkDetailsViewModel(application: Application) : AndroidViewModel(appl
 		var phone: String = "",
 		var address: String = "",
 		var notes: String = "",
-		var category: String = ""
+		var category: String = "",
+		var longitude: Double = 0.0,
+		var latitude: Double = 0.0,
+		var placeId: String? = null
 	) {
 
 		fun getImage(context: Context): Bitmap? {
